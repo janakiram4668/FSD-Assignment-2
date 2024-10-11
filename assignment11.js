@@ -9,16 +9,6 @@ function primitiveMultiply(a, b) {
 }
 
 function reliableMultiply(a, b) {
-    while (true) {
-        try {
-            return primitiveMultiply(a, b);
-        } catch (e) {
-            if (!(e instanceof MultiplicatorUnitFailure)) {
-                throw e; // Re-throw if it's a different kind of error
-            }
-            // If it's a MultiplicatorUnitFailure, continue the loop and retry
-        }
-    }
 }
 
 console.log(reliableMultiply(8, 8));
@@ -135,7 +125,8 @@ try {
 
 console.log(box.locked);
 
-/*Q3. REGEXP GOLF
+
+/* Q3. REGEXP GOLF
 Code golf is a term used for the game of trying to express a particular program in as few characters as
 possible. Similarly, regexp golf is the practice of writing as tiny a regular expression as possible to match a
 given pattern and only that pattern.
@@ -183,53 +174,92 @@ console.log(`Failure to match '${str}'`);
 for (let str of no) if (regexp.test(str)) {
 console.log(`Unexpected match for '${str}'`);
 }
-}
-*/
+} */
 
 function verify(regexp, yes, no) {
-    // Ignore unfinished exercises
     if (regexp.source == "...") return;
     for (let str of yes) if (!regexp.test(str)) {
-        console.log(`Failure to match '${str}'`);
+      console.log(`Failure to match '${str}'`);
     }
     for (let str of no) if (regexp.test(str)) {
-        console.log(`Unexpected match for '${str}'`);
+      console.log(`Unexpected match for '${str}'`);
     }
-}
-
-
-verify(/ca[rt]/,
+  }
+  
+  // 1. car and cat
+  verify(/ca[rt]/,
     ["my car", "bad cats"],
     ["camper", "high art"]
-);
-
-verify(/pr?op/,
+  );
+  
+  // 2. pop and prop
+  verify(/pr?op/,
     ["pop culture", "mad props"],
     ["plop", "prrrop"]
-);
-
-verify(/ferr(et|y|ari)/,
+  );
+  
+  // 3. ferret, ferry, and ferrari
+  verify(/ferr(et|y|ari)/,
     ["ferret", "ferry", "ferrari"],
     ["ferrum", "transfer A"]
-);
-
-verify(/\b\w+ious\b/,
+  );
+  
+  // 4. Any word ending in ious
+  verify(/ious\b/,
     ["how delicious", "spacious room"],
     ["ruinous", "consciousness"]
-);
-
-verify(/\s[.,:;]/,
+  );
+  
+  // 5. A whitespace character followed by a period, comma, colon, or semicolon
+  verify(/\s[.,:;]/,
     ["bad punctuation ."],
     ["escape the period"]
-);
-
-verify(/\b\w{7,}\b/,
+  );
+  
+  // 6. A word longer than six letters
+  verify(/\b\w{7,}\b/,
     ["Siebentausenddreihundertzweiundzwanzig"],
     ["no", "three small words"]
-);
-
-verify(/\b[^eE\s]+\b/,
+  );
+  
+  // 7. A word without the letter e (or E)
+  verify(/\b[^eE\s]+\b/,
     ["red platypus", "wobbling nest"],
-    ["earth bed", "bedrøvet abe", "BEET"]);
+    ["earth bed", "bedrøvet abe", "BEET"]
+  );
+  
+/* Q4. NUMBERS AGAIN
+Write an expression that matches only JavaScript-style numbers. It must support an optional minus or plus sign
+in front of the number, the decimal dot, and exponent notation—5e-3 or 1E10—again with an optional sign in
+front of the exponent. Also note that it is not necessary for there to be digits in front of or after the dot, but the
+number cannot be a dot alone. That is, .5 and 5. are valid JavaScript numbers, but a lone dot isn’t.
+// Fill in this regular expression.
+let number = /^...$/;
+// Tests:
+for (let str of ["1", "-1", "+15", "1.55", ".5", "5.",
+"1.3e2", "1E-4", "1e+12"]) {
+if (!number.test(str)) {
+console.log(`Failed to match '${str}'`);
+}
+}
+for (let str of ["1a", "+-1", "1.2.3", "1+1", "1e4.5",
+".5.", "1f5", "."]) {
+if (number.test(str)) {
+console.log(`Incorrectly accepted '${str}'`);
+}
+}*/
 
+let number = /^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;
 
+// Tests:
+for (let str of ["1", "-1", "+15", "1.55", ".5", "5.", "1.3e2", "1E-4", "1e+12"]) {
+  if (!number.test(str)) {
+    console.log(`Failed to match '${str}'`);
+  }
+}
+
+for (let str of ["1a", "+-1", "1.2.3", "1+1", "1e4.5", ".5.", "1f5", "."]) {
+  if (number.test(str)) {
+    console.log(`Incorrectly accepted '${str}'`);
+  }
+}
